@@ -11,7 +11,19 @@ using Microsoft.Extensions.Logging;
 namespace Calculadora.WebApi {
     public class Program {
         public static void Main (string[] args) {
-            CreateWebHostBuilder (args).Build ().Run ();
+            var configurations = new ConfigurationBuilder ()
+                .AddCommandLine (args)
+                .Build ();
+
+            var host = new WebHostBuilder ()
+                .UseConfiguration (configurations)
+                .UseKestrel ()
+                .UseContentRoot (Directory.GetCurrentDirectory ())
+                .UseIISIntegration ()
+                .UseStartup<Startup> ()
+                .Build ();
+
+            host.Run ();
         }
 
         public static IWebHostBuilder CreateWebHostBuilder (string[] args) =>
